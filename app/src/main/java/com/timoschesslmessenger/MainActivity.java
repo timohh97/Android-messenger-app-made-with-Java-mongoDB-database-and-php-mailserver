@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+    }
+
+
+    public void createNewAccount(View view) throws JSONException {
+
         DownloadTask downloadTask = new DownloadTask();
 
         try {
@@ -63,10 +68,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
-
-
-    public void createNewAccount(View view) throws JSONException {
         Log.i("Test:","Button clicked");
         EditText editTextUsername = findViewById(R.id.editText5);
         EditText editTextEmail = findViewById(R.id.editText6);
@@ -203,6 +204,9 @@ public class MainActivity extends AppCompatActivity {
                 jsonArray = new JSONArray(result);
                 globalJsonArray= new JSONArray(result);
                 Log.i("Json:", jsonArray.toString());
+
+                inputStreamReader.close();
+                inputStream.close();
 
 
             } catch (IOException e) {
