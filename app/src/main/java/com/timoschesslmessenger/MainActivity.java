@@ -55,6 +55,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void alreadyHaveAccount(View view)
+    {
+        goToLoginPage();
+    }
+
+    public void goToLoginPage()
+    {
+        Intent intent = new Intent(this,Main3Activity.class);
+        startActivity(intent);
+    }
+
+
     public void createNewAccount(View view) throws JSONException {
 
         DownloadTask downloadTask = new DownloadTask();
