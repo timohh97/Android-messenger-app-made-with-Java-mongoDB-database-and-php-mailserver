@@ -9,20 +9,25 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.IOUtils;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.stitch.core.internal.common.IoUtils;
 
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -34,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     JSONArray globalJsonArray = new JSONArray();
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    JSONObject postJsonObject = new JSONObject();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,28 +69,34 @@ public class MainActivity extends AppCompatActivity {
         EditText editTextPassword = findViewById(R.id.editText7);
         EditText editTextRepeat = findViewById(R.id.editText8);
 
-        String username = editTextUsername.getText().toString();
-        String email = editTextEmail.getText().toString();
-        String password = editTextPassword.getText().toString();
-        String repeat = editTextRepeat.getText().toString();
+        String usernameInput = editTextUsername.getText().toString();
+        String emailInput = editTextEmail.getText().toString();
+        String passwordInput = editTextPassword.getText().toString();
+        String repeatInput = editTextRepeat.getText().toString();
 
-        Log.i("Test:",username);
+        Log.i("Test:",usernameInput);
 
-        if(username.length()>3)
+        if(usernameInput.length()>3)
         {
-            if(!checkIfUsernameExists(username))
+            if(!checkIfUsernameExists(usernameInput))
             {
 
 
-                if(validate(email))
+                if(validate(emailInput))
                 {
 
-                    if(password.length()>5)
+                    if(passwordInput.length()>5)
                     {
-                        if(password.equals(repeat))
+                        if(passwordInput.equals(repeatInput))
                         {
                             Toast toast = Toast.makeText(this,"Creating a new account....",Toast.LENGTH_LONG);
                             toast.show();
+
+                            postJsonObject.put("username",usernameInput);
+                            postJsonObject.put("password",passwordInput);
+                            postJsonObject.put("email",emailInput);
+
+                            Log.i("POST:",postJsonObject.toString());
 
                             PostTask postTask = new PostTask();
 
@@ -211,38 +224,39 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... urls) {
 
-            JSONArray jsonArray = new JSONArray();
-
-            URL url;
-            HttpURLConnection urlConnection = null;
-
-            String result = "";
+            String postJsonObjectAsString = postJsonObject.toString();
 
             try {
-                url = new URL(urls[0]);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream inputStream = urlConnection.getInputStream();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                int data = inputStreamReader.read();
+                URL url = new URL(urls[0]);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json; utf-8");
+                urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
 
-                while (data != -1) {
-                    char current = (char) data;
-                    result += current;
-                    data = inputStreamReader.read();
+                OutputStream outputStream = urlConnection.getOutputStream();
+                outputStream.write(postJsonObjectAsString.getBytes("UTF-8"));
+                outputStream.close();
+
+                 try(BufferedReader br = new BufferedReader(
+                        new InputStreamReader(urlConnection.getInputStream(), "utf-8"))) {
+                          StringBuilder response = new StringBuilder();
+                          String responseLine = null;
+                          while ((responseLine = br.readLine()) != null) {
+                              response.append(responseLine.trim());
+                          }
+                          Log.i("PostResponse:",response.toString());
+
                 }
 
-                jsonArray = new JSONArray(result);
-                globalJsonArray= new JSONArray(result);
-                Log.i("Json:", jsonArray.toString());
 
 
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
 
-            return jsonArray.toString();
+            return null;
         }
 
 
