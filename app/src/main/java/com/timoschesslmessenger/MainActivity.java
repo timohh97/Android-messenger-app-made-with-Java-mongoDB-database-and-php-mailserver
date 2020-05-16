@@ -2,6 +2,7 @@ package com.timoschesslmessenger;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonWriter;
@@ -115,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
+                            openSecondActivity();
+
                         }
                         else
                         {
@@ -148,6 +151,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void openSecondActivity()
+    {
+        Intent intent = new Intent(this,Main2Activity.class);
+        startActivity(intent);
     }
 
 
