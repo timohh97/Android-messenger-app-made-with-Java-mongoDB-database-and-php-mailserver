@@ -128,7 +128,10 @@ public class MainActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
 
+                            sendEmail(emailInput);
+
                             openSecondActivity();
+
 
                         }
                         else
@@ -294,6 +297,64 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+
+    public void sendEmail(String email)
+    {
+        SendMailTask sendMailTask = new SendMailTask();
+
+        String from ="Timo Schessl Messenger Android App";
+        String message ="Registration successful.";
+
+        try{
+            sendMailTask.execute("https://timoschessl.com/mailserverAndroid.php?to="+email+"&from="+from+"&message="+message+"");
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public class SendMailTask extends AsyncTask<String,Void,String> {
+
+
+        @Override
+        protected String doInBackground(String... urls) {
+
+            URL url;
+            HttpURLConnection httpURLConnection = null;
+
+            String result="";
+
+            try {
+
+                url = new URL(urls[0]);
+                httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+
+                BufferedReader b = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+
+                StringBuffer stringBuffer = new StringBuffer();
+                String line;
+
+                while ((line = b.readLine()) != null) {
+                    stringBuffer.append(line);
+                }
+                b.close();
+                System.out.println(stringBuffer.toString());
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+
+            return null;
+
+        }
     }
 
 
