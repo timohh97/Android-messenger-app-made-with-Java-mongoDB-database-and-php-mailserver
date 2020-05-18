@@ -69,8 +69,8 @@ public class Main3Activity extends AppCompatActivity {
 
             if(usernameOfUserInDatabase.equals(usernameInput)&&passwordOfUserInDatabase.equals(passwordInput))
             {
-                goToLoginSuccessPage();
                 loginSuccess =true;
+                goToLoginSuccessPage();
             }
 
         }
