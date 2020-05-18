@@ -28,6 +28,7 @@ public class Main4Activity extends AppCompatActivity {
     ListView listView;
     ArrayAdapter arrayAdapter;
     ArrayList<String> users = new ArrayList<>();
+    ArrayList<String> emails = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,7 @@ public class Main4Activity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(),Main5Activity.class);
-                intent.putExtra("username",users.get(position));
+                intent.putExtra("email",emails.get(position));
 
                 startActivity(intent);
 
@@ -109,7 +110,9 @@ public class Main4Activity extends AppCompatActivity {
                     try {
                         JSONObject jsonObjectOfUser = globalJsonArray.getJSONObject(i);
                         String username = jsonObjectOfUser.get("username").toString();
+                        String email = jsonObjectOfUser.get("email").toString();
                         users.add(username);
+                        emails.add(email);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
