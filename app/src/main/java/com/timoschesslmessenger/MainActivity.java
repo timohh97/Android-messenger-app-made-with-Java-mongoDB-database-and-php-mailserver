@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
 
-                                postTask.execute("https://timoschessl-mail.netlify.app/.netlify/functions/server");
+                                postTask.execute("https://restapits.herokuapp.com/");
 
                             }
                             catch(Exception e)
