@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            downloadTask.execute("https://timoschessl-mail.netlify.app/.netlify/functions/server");
+            downloadTask.execute("https://restapits.herokuapp.com/");
 
         }
         catch(Exception e)
