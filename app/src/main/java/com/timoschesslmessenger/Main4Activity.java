@@ -40,7 +40,7 @@ public class Main4Activity extends AppCompatActivity {
         DownloadTask downloadTask = new DownloadTask();
 
         try{
-            downloadTask.execute("https://restapits.herokuapp.com/");
+            downloadTask.execute("https://android-restapi.herokuapp.com/");
         }
         catch(Exception e)
             {

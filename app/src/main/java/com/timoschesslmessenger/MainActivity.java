@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
 
-            downloadTask.execute("https://restapits.herokuapp.com/");
+            downloadTask.execute("https://android-restapi.herokuapp.com/");
 
         }
         catch(Exception e)
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
                             try {
 
-                                postTask.execute("https://restapits.herokuapp.com/");
+                                postTask.execute("https://android-restapi.herokuapp.com/");
 
                             }
                             catch(Exception e)
